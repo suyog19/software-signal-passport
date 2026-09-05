@@ -1,0 +1,24 @@
+name: Controlled fixture checks
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  fixture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Validate documentation fixture
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path("docs/dogfood-input.md").read_text()
+          assert "No real financial, production or customer behavior is changed." in text
+          Path("junit.xml").write_text('<testsuite tests="1" failures="0" errors="0" skipped="0"/>')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: fixture-test-report
+          path: junit.xml
+          retention-days: 30

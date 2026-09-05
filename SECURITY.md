@@ -4,8 +4,9 @@ Passports may point to sensitive evidence. Keep credentials, customer records,
 private paths and raw agent transcripts out of public changes. Use permitted,
 access-controlled evidence links and explain access gaps to reviewers.
 
-Version 0.1 is Markdown plus development-only repository checks; it has no service,
-accounts, telemetry or model integration. We address reports against the latest
+Version 0.1 is a manual Concept Preview. The v0.2 implementation uses customer-run
+GitHub Actions and optional customer-controlled model access. Read the
+[threat model](docs/threat-model.md) and [permissions](docs/installation.md). We address reports against the latest
 published version when practical; no service-level or compliance guarantee is made.
 
 Report a vulnerability privately using

@@ -68,7 +68,7 @@ class ValidationTests(unittest.TestCase):
     def test_bad_version_fails(self):
         (self.root / "distributable-files.txt").write_text("README.md\nVERSION\n")
         (self.root / "VERSION").write_text("9.9.9\n")
-        self.assertIn("VERSION must match the v0.1.0 distribution", validate(self.root))
+        self.assertIn("VERSION must match the v0.2.0 distribution", validate(self.root))
 
     def test_unsupported_file_protocol(self):
         self.assertIn("unsupported", link_errors(self.root, self.source, "[x](file:///tmp/private)")[0])

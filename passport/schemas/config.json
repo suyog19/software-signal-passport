@@ -1,0 +1,231 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "advisory"
+      ]
+    },
+    "change_classes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "maxItems": 100
+          },
+          "depth": {
+            "type": "string",
+            "enum": [
+              "None",
+              "Light",
+              "Standard",
+              "High-consequence"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "paths",
+          "depth"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 100
+    },
+    "default_depth": {
+      "type": "string",
+      "enum": [
+        "None",
+        "Light",
+        "Standard",
+        "High-consequence"
+      ]
+    },
+    "sensitive_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 200
+      },
+      "maxItems": 100
+    },
+    "owners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "maxItems": 100
+          },
+          "owner": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "required": [
+          "paths",
+          "owner"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 100
+    },
+    "human_authorities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "maxItems": 100
+    },
+    "agent_accounts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "maxItems": 100
+    },
+    "state_location": {
+      "type": "string",
+      "enum": [
+        "pr-comment"
+      ]
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "openai"
+          ]
+        },
+        "model": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 60
+        }
+      },
+      "required": [
+        "enabled",
+        "provider",
+        "model",
+        "timeout_seconds"
+      ],
+      "additionalProperties": false
+    },
+    "routing": {
+      "type": "object",
+      "properties": {
+        "technical": {
+          "type": "string",
+          "enum": [
+            "agent"
+          ]
+        },
+        "authority": {
+          "type": "string",
+          "enum": [
+            "human"
+          ]
+        }
+      },
+      "required": [
+        "technical",
+        "authority"
+      ],
+      "additionalProperties": false
+    },
+    "evidence_sources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "pr",
+          "files",
+          "checks",
+          "context",
+          "handoff"
+        ]
+      },
+      "maxItems": 100
+    },
+    "context_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 200
+      },
+      "maxItems": 20
+    },
+    "required_fields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "business_rules",
+          "rollback",
+          "verification",
+          "participation"
+        ]
+      },
+      "maxItems": 4
+    },
+    "max_rounds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 30
+    }
+  },
+  "required": [
+    "schema_version",
+    "enabled",
+    "mode",
+    "change_classes",
+    "default_depth",
+    "sensitive_paths",
+    "owners",
+    "human_authorities",
+    "agent_accounts",
+    "state_location",
+    "model",
+    "routing",
+    "evidence_sources",
+    "context_paths",
+    "required_fields",
+    "max_rounds"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,637 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1
+    },
+    "repository": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "pr": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000000
+    },
+    "assessed_commit": {
+      "type": "string",
+      "pattern": "[0-9a-f]{40}"
+    },
+    "base_commit": {
+      "type": "string",
+      "pattern": "[0-9a-f]{40}"
+    },
+    "depth": {
+      "type": "string",
+      "enum": [
+        "None",
+        "Light",
+        "Standard",
+        "High-consequence"
+      ]
+    },
+    "rationale": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "intent": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "context": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "revision": {
+            "type": "string",
+            "pattern": "[0-9a-f]{40}"
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 6000
+          },
+          "status": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "required": [
+          "path",
+          "revision",
+          "url",
+          "text",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 20
+    },
+    "handoff": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "author": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "received_at": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "schema_version": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1
+              },
+              "assessed_commit": {
+                "type": "string",
+                "pattern": "[0-9a-f]{40}"
+              },
+              "intent": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "participation": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "verification": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "claim": {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    "evidence": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "maxLength": 500
+                      },
+                      "maxItems": 20
+                    }
+                  },
+                  "required": [
+                    "claim",
+                    "evidence"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 20
+              },
+              "business_rules": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "rollback": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "uncertainties": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "maxItems": 20
+              }
+            },
+            "required": [
+              "schema_version",
+              "assessed_commit",
+              "intent",
+              "participation",
+              "verification",
+              "business_rules",
+              "rollback",
+              "uncertainties"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "author",
+          "url",
+          "received_at",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 1
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "kind": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "revision": {
+            "type": "string",
+            "pattern": "[0-9a-f]{40}"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "summary",
+          "url",
+          "revision"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 400
+    },
+    "declarations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "author": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 600
+          }
+        },
+        "required": [
+          "author",
+          "text",
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 100
+    },
+    "inferences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 800
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "maxItems": 10
+          }
+        },
+        "required": [
+          "text",
+          "evidence_ids"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 8
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 1000
+      },
+      "maxItems": 100
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "trigger": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "maxItems": 20
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "agent",
+              "human"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "answered",
+              "resolved",
+              "accepted-unresolved",
+              "superseded"
+            ]
+          },
+          "effect": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "created_at": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "updated_at": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "answer_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "maxItems": 100
+          },
+          "resolution_reason": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "assessed_commit": {
+            "type": "string",
+            "pattern": "[0-9a-f]{40}"
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "reason",
+          "trigger",
+          "role",
+          "status",
+          "effect",
+          "created_at",
+          "updated_at",
+          "answer_ids",
+          "resolution_reason",
+          "assessed_commit"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 100
+    },
+    "answers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "author": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "received_at": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "question_id": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "assessed_commit": {
+                "type": "string",
+                "pattern": "[0-9a-f]{40}"
+              },
+              "role": {
+                "type": "string",
+                "enum": [
+                  "agent",
+                  "human"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "maxItems": 20
+              }
+            },
+            "required": [
+              "question_id",
+              "assessed_commit",
+              "role",
+              "text",
+              "evidence"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "author",
+          "url",
+          "received_at",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 100
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 200
+      },
+      "maxItems": 100
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "[0-9a-f]{40}"
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "independent-review"
+          ]
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "maxItems": 100
+        },
+        "model": {
+          "type": "object",
+          "properties": {
+            "interpretations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "maxLength": 800
+                  },
+                  "evidence_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "maxLength": 80
+                    },
+                    "maxItems": 10
+                  }
+                },
+                "required": [
+                  "text",
+                  "evidence_ids"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 8
+            },
+            "uncertainties": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 400
+              },
+              "maxItems": 8
+            }
+          },
+          "required": [
+            "interpretations",
+            "uncertainties"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "revision",
+        "stage",
+        "findings",
+        "model"
+      ],
+      "additionalProperties": false
+    },
+    "stale": {
+      "type": "boolean"
+    },
+    "previous_commit": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "brief_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000
+    },
+    "created_at": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "updated_at": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "collector": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "drafting": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "reviewer": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "event_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "maxItems": 200
+        },
+        "round": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "input_digest": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "collector",
+        "drafting",
+        "reviewer",
+        "event_ids",
+        "round",
+        "input_digest"
+      ],
+      "additionalProperties": false
+    },
+    "advisory": {
+      "type": "string",
+      "enum": [
+        "no-passport-needed",
+        "advisory-with-open-questions",
+        "advisory-with-accepted-uncertainty",
+        "advisory-reviewed",
+        "stale",
+        "advisory-with-uncertainty"
+      ]
+    },
+    "command_errors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      },
+      "maxItems": 30
+    }
+  },
+  "required": [
+    "schema_version",
+    "repository",
+    "pr",
+    "assessed_commit",
+    "base_commit",
+    "depth",
+    "rationale",
+    "intent",
+    "context",
+    "handoff",
+    "evidence",
+    "declarations",
+    "inferences",
+    "uncertainties",
+    "questions",
+    "answers",
+    "roles",
+    "review",
+    "stale",
+    "previous_commit",
+    "brief_revision",
+    "created_at",
+    "updated_at",
+    "provenance",
+    "advisory",
+    "command_errors"
+  ],
+  "additionalProperties": false
+}

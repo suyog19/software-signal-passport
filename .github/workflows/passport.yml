@@ -1,0 +1,66 @@
+name: Passport reusable assessment
+on:
+  workflow_call:
+    inputs:
+      runtime-ref:
+        required: true
+        type: string
+      pr:
+        required: true
+        type: string
+    secrets:
+      model-key:
+        required: false
+permissions: {}
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      checks: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: suyog19/software-signal-passport
+          ref: ${{ inputs.runtime-ref }}
+          persist-credentials: false
+      - name: Collect, draft and separately review
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PASSPORT_MODEL_KEY: ${{ secrets.model-key }}
+          PASSPORT_PR: ${{ inputs.pr }}
+        run: python -m passport analyze --pr "$PASSPORT_PR" --file assessment.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: passport-assessment
+          path: assessment.json
+          retention-days: 30
+          if-no-files-found: error
+  publish:
+    needs: analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: suyog19/software-signal-passport
+          ref: ${{ inputs.runtime-ref }}
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: passport-assessment
+          path: assessment
+      - name: Revalidate and publish advisory state
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PASSPORT_PR: ${{ inputs.pr }}
+        run: python -m passport publish --pr "$PASSPORT_PR" --file assessment/assessment.json

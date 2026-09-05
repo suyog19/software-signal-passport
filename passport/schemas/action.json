@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "question_id": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "assessed_commit": {
+      "type": "string",
+      "pattern": "[0-9a-f]{40}"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "agent",
+        "human"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "request-evidence",
+        "reassign-agent",
+        "escalate",
+        "accept-unresolved",
+        "supersede",
+        "reopen",
+        "close"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "question_id",
+    "assessed_commit",
+    "role",
+    "action",
+    "reason"
+  ],
+  "additionalProperties": false
+}

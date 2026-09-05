@@ -1,0 +1,75 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1
+    },
+    "assessed_commit": {
+      "type": "string",
+      "pattern": "[0-9a-f]{40}"
+    },
+    "intent": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "participation": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "verification": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "maxItems": 20
+          }
+        },
+        "required": [
+          "claim",
+          "evidence"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 20
+    },
+    "business_rules": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "rollback": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      },
+      "maxItems": 20
+    }
+  },
+  "required": [
+    "schema_version",
+    "assessed_commit",
+    "intent",
+    "participation",
+    "verification",
+    "business_rules",
+    "rollback",
+    "uncertainties"
+  ],
+  "additionalProperties": false
+}

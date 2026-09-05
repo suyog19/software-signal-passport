@@ -21,5 +21,6 @@ An agent may prepare changes and review independently, but cannot perform the
 canonical process's manual production promotion.
 
 Contributions are under [Apache-2.0](LICENSE). Do not submit confidential evidence,
-customer data or secrets. Prefer specific field improvements from a
-[five-change trial](docs/team-trial-guide.md) over new automation.
+customer data or secrets. Use [the installed workflow](docs/workflow.md) for implementation changes.
+Prefer measured reductions in reviewer reconstruction and developer effort; keep
+[tested limitations](docs/integrations.md) accurate.

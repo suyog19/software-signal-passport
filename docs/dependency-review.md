@@ -1,6 +1,7 @@
 # Development dependency decisions
 
-The distributed Passport is Markdown and has no runtime dependencies. The
+The v0.1 Passport is Markdown. The v0.2 runtime uses Python standard-library
+modules only, without third-party runtime packages. The
 maintainer checks use Python's standard library and Markdownlint CLI2. GitHub
 Actions also runs the separately pinned canonical engineering process.
 

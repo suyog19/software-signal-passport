@@ -88,6 +88,9 @@ tested from the owner-approved base.
 
 ## Release
 
+The [v0.2 release gate](release-gate.md) owns the integrated preview checklist.
+The [dogfood record](dogfood.md) separates exercised behavior from remaining gates.
+
 The owner must manually authorize and promote production under the locked
 canonical process. A second human is not mandatory. Agents prepare reviewable
 artifacts and commands; they must not perform the manual boundary on the owner's
@@ -96,7 +99,7 @@ behalf.
 After exact-revision checks, independent review and the required bootstrap or
 readiness decision, the owner merges. Revalidate the resulting main revision,
 update the unreleased status/date through review, and prepare an annotated
-`v0.1.0` tag at that verified revision. The owner publishes the tag and GitHub
+`v0.2.0` tag at that verified revision. The owner publishes the tag and GitHub
 Release using the prepared release notes. Never move a published version tag.
 
 After publication, verify release/default-branch files, copied versioned links

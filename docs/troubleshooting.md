@@ -19,3 +19,10 @@ Actions status remains visible when publication fails. A revision-labelled brief
 does not prove the latest run succeeded. Model failure never converts missing
 evidence into confidence. Local validation works without GitHub, but does not
 establish live integration.
+
+## Reusable workflow not found after squash merge
+
+Verify that the pinned upstream commit remains reachable from its default branch
+or a release tag. Restore the deleted reviewed source branch temporarily if needed,
+then use the installer update command to pin the merged default-branch commit.
+Review that diff. Do not replace an immutable pin with a moving branch name.

@@ -3,6 +3,10 @@
 Use the source-checkout commands in the [README](../README.md). The installer
 requires an exact reviewed 40-character upstream commit and prints a unified diff.
 It does not commit, push, change branch rules or merge anything.
+Use a commit retained by the upstream default branch or a release tag. A feature
+commit can become unavailable to reusable-workflow resolution after squash merge
+and branch deletion, even when the contents API still returns it. Update consumer
+pins to the merged upstream commit before removing temporary source branches.
 
 The installed files are:
 

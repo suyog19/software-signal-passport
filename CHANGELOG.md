@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.1.0 — unreleased
+## 0.1.0
 
-Initial distribution prepared for release:
+Initial distribution:
 
 - Core Markdown Passport and copyable GitHub PR section.
 - None, Light, Standard and High-consequence usage guidance.

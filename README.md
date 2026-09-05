@@ -93,7 +93,7 @@ A trial is learning evidence, not proof of product-market fit.
 
 ## Status and boundaries
 
-Version **0.1.0**, initial template distribution prepared for public release.
+Version **0.1.0**, the initial Markdown template distribution.
 Consult [Releases](https://github.com/suyog19/software-signal-passport/releases)
 for published versions. Free and openly usable under [Apache-2.0](LICENSE),
 including team and commercial use under its terms.

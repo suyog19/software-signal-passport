@@ -32,7 +32,7 @@ def assess(repo, pr, config, collected, previous, now, permission, model=None):
                        "input_digest": ""},
         "advisory": "advisory-with-open-questions", "command_errors": []
     }
-    if state["previous_commit"]:
+    if state["previous_commit"] or (previous and previous["base_commit"] != base):
         state["uncertainties"].append("Previous assessment "+state["previous_commit"]+" is stale; prior answers and conclusions require reassessment")
         for q in state["questions"]:
             q.update(status="open", assessed_commit=head, answer_ids=[], updated_at=now,
@@ -43,6 +43,7 @@ def assess(repo, pr, config, collected, previous, now, permission, model=None):
     if not state["roles"]:
         state["roles"] = ["Accountable owner Unknown; PR author is not inferred approval"]
     pending = []
+    permitted_commands = []
     for comment in collected["comments"]:
         if not comment.get("body", "").startswith("/passport "):
             continue
@@ -56,6 +57,7 @@ def assess(repo, pr, config, collected, previous, now, permission, model=None):
             perm = permission(comment["user"]["login"])
             if not eligible(comment, pr, config, perm):
                 raise Invalid("Command author is not an eligible contributor")
+            permitted_commands.append((comment["id"], comment.get("updated_at"), digest(comment.get("body", ""))))
             if kind == "handoff":
                 if "handoff" in config["evidence_sources"] and data["assessed_commit"] == head:
                     state["handoff"] = [{"author": comment["user"]["login"], "url": comment["html_url"],
@@ -76,7 +78,7 @@ def assess(repo, pr, config, collected, previous, now, permission, model=None):
             "created_at": now, "updated_at": now, "answer_ids": [], "resolution_reason": "",
             "assessed_commit": head})
     if depth in {"Standard", "High-consequence"}:
-        if not handoff:
+        if not handoff or not handoff.get("participation", "").strip():
             question("Q-handoff", "Supply the structured implementation handoff and identify material participation.",
                      "Implementation facts and participation are not supplied", "agent", ["pr"])
         successful = [e for e in state["evidence"] if e["kind"] in {"check-result", "commit-status"} and e["summary"].endswith(": success")]
@@ -89,7 +91,7 @@ def assess(repo, pr, config, collected, previous, now, permission, model=None):
             question("Q-authority", "Which authorized human owns the sensitive change and its unresolved decisions?",
                      "Sensitive paths require human attention; ownership and approvals cannot be inferred", "human", ["pr"])
         for field in sorted(required):
-            if not handoff.get(field):
+            if not handoff.get(field) or str(handoff[field]).strip().lower() in {"unknown", "not found", "not run", "not supplied"}:
                 question("Q-"+field, "Provide "+field.replace("_", " ")+" or explain its applicability with evidence.",
                          "Applicable repository field is missing", "human" if field == "business_rules" else "agent", ["pr"])
     for comment, data, kind, perm in pending:
@@ -106,12 +108,12 @@ def assess(repo, pr, config, collected, previous, now, permission, model=None):
             state["provenance"]["round"] += 1
         except Invalid as exc:
             state["command_errors"].append(str(comment["id"])+": "+str(exc))
-    state["provenance"]["input_digest"] = digest({"head": head, "base": base, "commands": [(c["id"], c.get("updated_at"), digest(c.get("body", ""))) for c in collected["comments"] if c.get("body", "").startswith("/passport ")], "config": config, "evidence": state["evidence"], "context": state["context"],
+    state["provenance"]["input_digest"] = digest({"head": head, "base": base, "commands": permitted_commands, "config": config, "evidence": state["evidence"], "context": state["context"],
                                                 "handoff": state["handoff"], "events": event_ids})
     # Repeat deliveries with unchanged evidence never consume a model call or new state revision.
     if previous and previous["provenance"]["input_digest"] == state["provenance"]["input_digest"]:
         return previous
-    if model and depth in {"Standard", "High-consequence"}:
+    if model and depth in {"Standard", "High-consequence"} and state["provenance"]["round"] < config["max_rounds"]:
         permitted = {"evidence": state["evidence"], "context": state["context"], "handoff": state["handoff"]}
         try:
             drafted = model.interpret(permitted, "draft")
@@ -126,6 +128,8 @@ def assess(repo, pr, config, collected, previous, now, permission, model=None):
             separate = model.interpret({"evidence": state["evidence"], "draft": state["inferences"],
                                         "uncertainties": state["uncertainties"]}, "review")
             state["review"]["model"] = separate
+            state["review"]["findings"].extend("Model review (inference): "+i["text"] for i in separate["interpretations"])
+            state["uncertainties"].extend(separate["uncertainties"])
             state["provenance"]["reviewer"] += "; isolated openai invocation"
         except Invalid as exc:
             state["uncertainties"].append("Independent model review unavailable: "+str(exc))

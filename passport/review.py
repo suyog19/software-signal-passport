@@ -1,43 +1,42 @@
-"""A separate deterministic review stage; no draft-stage authority."""
-from .security import github_url
-
+"""Separately recorded deterministic evidence review, not code assurance."""
 def run(state, current_head):
     findings = []
     if state["assessed_commit"] != current_head:
         state["stale"] = True
         findings.append("Assessed revision is stale; reassessment required")
     known = {e["url"]: e for e in state["evidence"]}
+    checks = [e for e in state["evidence"] if e["kind"] in {"check-result", "commit-status"}]
+    failed = [e for e in checks if any(word in e["summary"].lower() for word in (": failure", ": error", ": cancelled", ": timed_out", ": action_required"))]
+    pending = [e for e in checks if not any(e["summary"].endswith(": "+v) for v in ("success", "neutral", "skipped", "failure", "error", "cancelled", "timed_out", "action_required"))]
     for e in state["evidence"]:
         if e["revision"] != current_head:
             findings.append("Stale evidence: "+e["id"])
+    for e in failed:
+        findings.append("Verification failed: "+e["summary"])
+    for e in pending:
+        findings.append("Verification not completed: "+e["summary"])
     handoff = state["handoff"][0]["data"] if state["handoff"] else {}
     for claim in handoff.get("verification", []):
-        if not claim["evidence"] or not all(u in known for u in claim["evidence"]):
+        if not claim["evidence"] or not all(u in known and known[u]["kind"] in {"check-result", "commit-status"} for u in claim["evidence"]):
             findings.append("Handoff test declaration lacks observed evidence: "+claim["claim"][:300])
-        if "pass" in claim["claim"].lower() and any(
-            any(word in e["summary"].lower() for word in ("failure", "cancelled", "timed_out", ": error"))
-            for e in state["evidence"] if e["kind"] in {"check-result", "commit-status"}
-        ):
+        if "pass" in claim["claim"].lower() and failed:
             findings.append("Claimed passing verification contradicts observed failed/cancelled checks")
     for q in state["questions"]:
-        if q["status"] != "answered":
+        if q["status"] in {"accepted-unresolved", "superseded"}:
             continue
-        answers = [a for a in state["answers"] if a["id"] in q["answer_ids"] and a["data"]["assessed_commit"] == current_head]
-        if not answers:
-            continue
-        answer = answers[-1]
-        links = answer["data"]["evidence"]
-        verified = bool(links) and all(url in known for url in links)
-        if q["id"] == "Q-verification":
-            verified = verified and any(known[url]["kind"] in {"check-result", "commit-status"} and (
-                known[url]["summary"].endswith(": success")) for url in links)
         if q["id"] == "Q-handoff":
-            verified = verified and bool(handoff)
-        if verified:
-            q["status"] = "resolved"
-            q["resolution_reason"] = "Separate review matched cited evidence to the assessed revision; answer remains an attributable declaration, not proof of correctness"
-        else:
-            findings.append(q["id"]+": answer recorded, but evidence is missing, inaccessible, stale or not among observed sources")
+            supplied = bool(handoff) and bool(handoff.get("participation", "").strip())
+            q["status"] = "resolved" if supplied else "open"
+            q["resolution_reason"] = "Current-revision structured handoff observed; contents remain declarations" if supplied else "No current handoff observed"
+        elif q["id"] == "Q-verification":
+            successful = [e for e in checks if e["revision"] == current_head and e["summary"].endswith(": success")]
+            supplied = bool(successful) and not failed and not pending
+            q["status"] = "resolved" if supplied else "open"
+            q["resolution_reason"] = "Current checks completed successfully; scope is limited to named checks, not overall correctness" if supplied else "Current verification missing, pending or failing"
+        elif q["status"] == "answered":
+            # Arbitrary metadata/file URLs never establish recovery, business rules
+            # or the truth of a technical claim. Human verification can close it.
+            findings.append(q["id"]+": answer received; substantive verification is not automated")
     if state["depth"] in {"None", "Light"} and state["questions"]:
         findings.append("Review proportionality: questions persisted from prior consequential assessment")
     for q in state["questions"]:

@@ -49,8 +49,8 @@ def apply(state, comment, data, kind, config, permission):
         action = data["action"]
         if action in {"accept-unresolved", "supersede", "close", "reassign-agent"} and not is_human:
             raise Invalid("This action requires configured human authority")
-        if action == "close" and question["status"] != "resolved":
-            raise Invalid("Cannot close without a separately verified answer")
+        if action == "close" and question["status"] not in {"answered", "resolved"}:
+            raise Invalid("Cannot close without an answer for human verification")
         status = {"request-evidence": "open", "reassign-agent": "open", "escalate": "open",
                   "accept-unresolved": "accepted-unresolved", "supersede": "superseded",
                   "reopen": "open", "close": "resolved"}[action]
@@ -59,5 +59,5 @@ def apply(state, comment, data, kind, config, permission):
             question["role"] = "human"
         if action == "reassign-agent":
             question["role"] = "agent"
-        question["resolution_reason"] = redact(data["reason"])[:1000]+" (by "+comment["user"]["login"]+"; "+comment["html_url"]+")"
+        question["resolution_reason"] = ("Authorized human verification declaration: " if action == "close" else "")+redact(data["reason"])[:1000]+" (by "+comment["user"]["login"]+"; "+comment["html_url"]+")"
     question["updated_at"] = now

@@ -12,6 +12,7 @@ from .github import GitHub
 from .evidence import configuration, collect
 from .engine import assess
 from .provider import provider
+from .protocol import command, eligible
 from .render import MARKER, extract, render
 
 def api(repo):
@@ -57,6 +58,21 @@ def analyze(number, output):
     if not config["enabled"]:
         Path(output).write_text(json.dumps({"disabled": True}))
         return
+    if os.environ.get("GITHUB_EVENT_NAME") == "issue_comment":
+        event = parse(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
+        cid = event["comment"]["id"]
+        if type(cid) is not int or cid < 1:
+            raise Invalid("Invalid command event identity")
+        trigger = client.get(f"issues/comments/{cid}")
+        if trigger.get("issue_url") != f"https://api.github.com/repos/{repo}/issues/{number}":
+            raise Invalid("Command belongs to another pull request")
+        if not eligible(trigger, pr, config, client.permission(trigger["user"]["login"])):
+            raise Invalid("Unauthorized command; no model invocation performed")
+        parsed = command(trigger)
+        if parsed is None or trigger["updated_at"] != trigger["created_at"]:
+            raise Invalid("Invalid or edited command; no model invocation performed")
+        if parsed[0] != "refresh" and parsed[1]["assessed_commit"] != pr["head"]["sha"]:
+            raise Invalid("Stale command; no model invocation performed")
     evidence = collect(client, number, config, pr)
     existing = canonical(evidence["comments"])
     previous = extract(existing["body"]) if existing else None

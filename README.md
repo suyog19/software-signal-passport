@@ -6,7 +6,8 @@ Developers correct gaps instead of manually writing the report.
 
 **v0.2.0 is in development; not released or recommended for trial use yet.**
 [Installation](docs/installation.md) · [Workflow](docs/workflow.md) ·
-[Protocol](docs/protocol.md) · [Configuration](docs/configuration.md)
+[Protocol](docs/protocol.md) · [Configuration](docs/configuration.md) ·
+[Example brief](docs/example-review-brief.md)
 
 ## Five-minute quick start
 

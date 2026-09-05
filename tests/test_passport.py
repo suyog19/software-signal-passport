@@ -362,6 +362,15 @@ class TransportProviderTests(unittest.TestCase):
         self.assertNotIn("tools", calls[0])
         self.assertTrue(calls[0]["text"]["format"]["strict"])
 
+    def test_model_redacts_parsed_text_values(self):
+        content = {"interpretations": [{"text": "Rotate token: old", "evidence_ids": ["pr"]}],
+                   "uncertainties": ["line one\npassword=example"]}
+        model, _ = self.model(content)
+        result = model.interpret({"evidence": evidence()["evidence"]}, "draft")
+        self.assertEqual("Rotate token=[REDACTED]", result["interpretations"][0]["text"])
+        self.assertEqual(["line one\npassword=[REDACTED]"], result["uncertainties"])
+        check("model", result)
+
     def test_malformed_model_schema_rejected(self):
         model, _ = self.model({"merge_approved": True})
         with self.assertRaises(Invalid):
@@ -413,3 +422,37 @@ class TransportProviderTests(unittest.TestCase):
         with patch.dict("os.environ", {}, clear=True):
             with self.assertRaises(Invalid):
                 event_identity(1)
+
+class RedactionRegressionTests(unittest.TestCase):
+    def test_handoff_redacts_strings_without_corrupting_json(self):
+        h = handoff()
+        h["intent"] = "Rotate token: old"
+        h["uncertainties"] = ["password=example", "line one\nsecret: example"]
+        state = run(evidence(comments=[comment("handoff", h)]))
+        self.assertEqual([], state["command_errors"])
+        self.assertEqual("Rotate token=[REDACTED]", state["handoff"][0]["data"]["intent"])
+        self.assertNotIn("example", str(state["handoff"]))
+        check("state", state)
+
+    def test_answer_preserves_escaped_multiline_structure(self):
+        a = answer("Q-rollback")
+        a["text"] = "Rotate token: old\n" + "-----BEGIN " + "PRIVATE KEY-----\nexample\n-----END " + "PRIVATE KEY-----"
+        state = run(evidence("auth/main.py", comments=[comment("answer", a)]))
+        self.assertEqual([], state["command_errors"])
+        self.assertEqual("Rotate token=[REDACTED]\n[REDACTED]", state["answers"][0]["data"]["text"])
+        check("state", state)
+
+    def test_dependency_and_build_text_files_need_standard_handling(self):
+        for path in ("requirements.txt", "services/api/requirements-dev.txt", "requirements/prod.txt", "constraints.txt", "CMakeLists.txt"):
+            with self.subTest(path=path):
+                state = run(evidence(path))
+                self.assertEqual("Standard", state["depth"])
+                self.assertTrue(state["questions"])
+        self.assertEqual("None", run(evidence("notes.txt"))["depth"])
+
+    def test_root_and_nested_migrations_are_sensitive(self):
+        for path in ("migrations/001_drop_users.sql", "services/api/migrations/001.sql"):
+            state = run(evidence(path))
+            self.assertEqual("High-consequence", state["depth"])
+            self.assertEqual(1, state["rationale"].count("Sensitive path:"))
+            self.assertTrue(any(q["id"] == "Q-authority" for q in state["questions"]))

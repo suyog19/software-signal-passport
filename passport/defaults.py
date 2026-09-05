@@ -3,10 +3,11 @@ DEFAULT = {
     "change_classes": [
         {"name": "documentation", "paths": ["docs/**", "*.md"], "depth": "Light"},
         {"name": "tests", "paths": ["tests/**"], "depth": "Light"},
-        {"name": "trivial", "paths": ["*.txt"], "depth": "None"}
+        {"name": "trivial", "paths": ["*.txt"], "depth": "None"},
+        {"name": "dependency manifests", "paths": ["requirements*.txt", "**/requirements*.txt", "requirements/**", "**/requirements/**", "constraints*.txt", "**/constraints*.txt", "CMakeLists.txt", "**/CMakeLists.txt"], "depth": "Standard"}
     ],
     "default_depth": "Standard",
-    "sensitive_paths": [".github/workflows/**", "**/auth/**", "auth/**", "payments/**", "**/migrations/**"],
+    "sensitive_paths": [".github/workflows/**", "**/auth/**", "auth/**", "payments/**", "migrations/**", "**/migrations/**"],
     "owners": [], "human_authorities": [], "agent_accounts": [],
     "state_location": "pr-comment",
     "model": {"enabled": False, "provider": "openai", "model": "gpt-5.4-mini", "timeout_seconds": 45},

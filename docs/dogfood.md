@@ -31,6 +31,11 @@ change and not intended for merge into main.
   Human authorities remain deliberately unconfigured. No human approval or risk
   acceptance is fabricated.
 
+[Final reassessment](https://github.com/suyog19/software-signal-passport/actions/runs/33962802283)
+published brief 6: handoff receipt and current checks resolved; recovery answered
+but unverified; human authority and business rules open. See the
+[sanitized Review Brief](example-review-brief.md).
+
 The tested advisory result retains open human questions and unverified recovery.
 A technical answer citing a URL does not automatically establish its truth.
 

@@ -4,7 +4,7 @@ import json
 from .evidence import select_depth
 from .protocol import command, eligible, apply
 from .schema import Invalid, check, parse
-from .security import digest, redact
+from .security import digest, redact, redact_data
 from .review import run as review
 
 def assess(repo, pr, config, collected, previous, now, permission, model=None):
@@ -61,7 +61,7 @@ def assess(repo, pr, config, collected, previous, now, permission, model=None):
             if kind == "handoff":
                 if "handoff" in config["evidence_sources"] and data["assessed_commit"] == head:
                     state["handoff"] = [{"author": comment["user"]["login"], "url": comment["html_url"],
-                                         "received_at": comment["created_at"], "data": parse(redact(json.dumps(data)))}]
+                                         "received_at": comment["created_at"], "data": check("handoff", redact_data(data))}]
             elif str(comment["id"]) not in event_ids:
                 pending.append((comment, data, kind, perm))
         except Invalid as exc:

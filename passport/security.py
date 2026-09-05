@@ -24,6 +24,16 @@ def redact(value):
     text = re.sub(r"(?i)(authorization|api[_-]?key|password|secret|token)\s*[:=]\s*[^\s,;]+", r"\1=[REDACTED]", text)
     return text
 
+def redact_data(value):
+    """Redact parsed string values without modifying JSON syntax or field names."""
+    if isinstance(value, str):
+        return redact(value)
+    if isinstance(value, list):
+        return [redact_data(item) for item in value]
+    if isinstance(value, dict):
+        return {key: redact_data(item) for key, item in value.items()}
+    return value
+
 def safe_text(value, limit=1000):
     text = html.escape(redact(value)[:limit], quote=True)
     text = re.sub(r"[\x00-\x1f\x7f]", " ", text)

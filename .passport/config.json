@@ -24,6 +24,20 @@
         "*.txt"
       ],
       "depth": "None"
+    },
+    {
+      "name": "dependency manifests",
+      "paths": [
+        "requirements*.txt",
+        "**/requirements*.txt",
+        "requirements/**",
+        "**/requirements/**",
+        "constraints*.txt",
+        "**/constraints*.txt",
+        "CMakeLists.txt",
+        "**/CMakeLists.txt"
+      ],
+      "depth": "Standard"
     }
   ],
   "default_depth": "Standard",
@@ -32,6 +46,7 @@
     "**/auth/**",
     "auth/**",
     "payments/**",
+    "migrations/**",
     "**/migrations/**"
   ],
   "owners": [],

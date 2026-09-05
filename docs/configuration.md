@@ -25,7 +25,8 @@ Unknown fields, unsupported versions, invalid types and out-of-range limits fail
 
 [Defaults](../passport/defaults.py) do not understand every organization's risk.
 Review path rules. Python fnmatch patterns are case-sensitive. Documentation
-defaults to Light; text files to None. Sensitive renamed paths retain depth.
+defaults to Light; ordinary text files to None. Dependency/build text manifests
+receive Standard handling, and root or nested migrations are sensitive. Sensitive renamed paths retain depth.
 
 Model context includes permitted evidence, configured context files and handoff.
 Arbitrary issue links and answer URLs are not retrieved. No provider is used for

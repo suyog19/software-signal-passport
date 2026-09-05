@@ -21,7 +21,7 @@ def configuration(api, base):
 def select_depth(files, config):
     values, reasons = [], []
     for item in files:
-        for path in [item["filename"], item.get("previous_filename", item["filename"])]:
+        for path in dict.fromkeys([item["filename"], item.get("previous_filename", item["filename"])]):
             if any(fnmatch.fnmatchcase(path, p) for p in config["sensitive_paths"]):
                 values.append(3)
                 reasons.append("Sensitive path: "+path)

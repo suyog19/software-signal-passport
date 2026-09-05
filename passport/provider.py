@@ -4,7 +4,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, build_opener
 from .github import NoRedirect
 from .schema import Invalid, check, load_schema, parse
-from .security import redact
+from .security import redact_data
 
 class OpenAI:
     def __init__(self, key, model, timeout=45, opener=None):
@@ -43,7 +43,7 @@ class OpenAI:
             permitted = {e["id"] for e in evidence["evidence"]}
             if any(not set(i["evidence_ids"]).issubset(permitted) or not i["evidence_ids"] for i in parsed["interpretations"]):
                 raise Invalid("Model output cites unsupported evidence")
-            return parse(redact(json.dumps(parsed)))
+            return check("model", redact_data(parsed))
         except (HTTPError, URLError, TimeoutError):
             raise Invalid("Model request failed; check credential, quota or timeout; deterministic draft retained") from None
 

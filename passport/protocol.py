@@ -1,6 +1,6 @@
 import re
 from .schema import Invalid, check, parse
-from .security import redact, github_url
+from .security import redact, redact_data, github_url
 
 def command(comment):
     body = comment.get("body", "")
@@ -39,7 +39,7 @@ def apply(state, comment, data, kind, config, permission):
         if not all(github_url(url, state["repository"]) for url in data["evidence"]):
             raise Invalid("Evidence must use same-repository GitHub URLs; external URLs are not retrieved")
         answer = {"id": str(comment["id"]), "author": comment["user"]["login"], "url": comment["html_url"],
-                  "received_at": now, "data": parse(redact(__import__("json").dumps(data)))}
+                  "received_at": now, "data": check("answer", redact_data(data))}
         state["answers"].append(answer)
         question["answer_ids"].append(answer["id"])
         question["status"] = "answered"

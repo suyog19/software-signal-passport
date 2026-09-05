@@ -1,3 +1,4 @@
 # Controlled behavior
 
-Initial fixture text.
+This changed fixture requires a durable handoff and explicit human escalation.
+No real financial, production or customer behavior is changed.

@@ -1,0 +1,229 @@
+{
+  "core": {
+    "capabilities": {
+      "architect": {
+        "authority": "architecture_and_technical_boundaries"
+      },
+      "ci-automation": {
+        "authority": "objective_checks_and_policy_enforcement"
+      },
+      "engineering-manager": {
+        "authority": "delivery_risk_and_operational_realism"
+      },
+      "functional-qa": {
+        "authority": "independent_behavioural_assurance"
+      },
+      "independent-review": {
+        "authority": "fresh_context_final_review"
+      },
+      "non-functional-qa": {
+        "authority": "security_reliability_performance_privacy_operations"
+      },
+      "orchestrator": {
+        "authority": "classification_handoffs_and_evidence"
+      },
+      "product-owner": {
+        "authority": "product_intent_and_acceptance"
+      },
+      "senior-ux-designer": {
+        "authority": "user_interaction_accessibility_perspective"
+      },
+      "software-developer": {
+        "authority": "implementation_within_resolved_obligations"
+      },
+      "solution-sufficiency": {
+        "authority": "minimum_sufficient_solution_and_feedback_triage"
+      }
+    },
+    "controls": {
+      "agent_execution_security": {
+        "audit_log_required": true,
+        "credential_isolation_required": true,
+        "destructive_action_requires_explicit_authorization": true,
+        "enabled": true,
+        "external_mutation_requires_explicit_authorization": true,
+        "least_privilege": true,
+        "network_allowlist_required": true,
+        "network_default": "deny",
+        "production_credentials_prohibited": true,
+        "prompt_injection_resistance_required": true,
+        "protected_requires_enforced_isolation": true,
+        "sandbox_required_for": [
+          "Standard",
+          "Protected"
+        ],
+        "semantics": "locked",
+        "tool_allowlist_required": true,
+        "tool_default": "deny",
+        "untrusted_content_is_data_not_instruction": true
+      },
+      "committed_secrets_prohibited": {
+        "enabled": true,
+        "semantics": "locked"
+      },
+      "exact_revision_evidence": {
+        "enabled": true,
+        "semantics": "locked"
+      },
+      "human_production_boundary": {
+        "automation_may_authorize": false,
+        "automation_may_promote": false,
+        "enabled": true,
+        "human_authorization_required": true,
+        "manual_promotion_required": true,
+        "owner_manual_authorization_may_satisfy": true,
+        "semantics": "locked"
+      },
+      "independent_review": {
+        "enabled": true,
+        "fresh_context_required": true,
+        "implementation_context_may_issue_verdict": false,
+        "semantics": "locked"
+      },
+      "issue_first": {
+        "enabled": true,
+        "semantics": "locked"
+      },
+      "protected_characteristics": {
+        "semantics": "extensible",
+        "values": [
+          "financial_consequence",
+          "payment",
+          "authentication",
+          "authorization",
+          "iam",
+          "secrets",
+          "sensitive_data",
+          "production_controls",
+          "irreversible_data"
+        ]
+      },
+      "protected_fail_closed": {
+        "enabled": true,
+        "semantics": "locked"
+      },
+      "repository_paths": {
+        "semantics": "overridable",
+        "values": []
+      },
+      "required_capabilities": {
+        "semantics": "extensible",
+        "values": [
+          "software-developer",
+          "ci-automation"
+        ]
+      },
+      "traceability": {
+        "enabled": true,
+        "semantics": "locked"
+      },
+      "validation_commands": {
+        "semantics": "overridable",
+        "values": []
+      }
+    },
+    "native_enforcement": {
+      "production_environment": {
+        "automation_may_promote": false,
+        "distinct_human_reviewer_required": false,
+        "manual_human_promotion_required": true,
+        "stronger_multi_human_gate_permitted": true
+      },
+      "protected_branch_required": true,
+      "readiness_gate_required": true
+    },
+    "process": {
+      "source": "suyog19/software-engineering-process",
+      "version": "1.4.1"
+    },
+    "schema_version": 1
+  },
+  "delivery_profiles": {
+    "Lean": {
+      "prohibited_actions": [
+        "self_independent_review",
+        "unapproved_scope_expansion"
+      ],
+      "required_capabilities": [
+        "software-developer",
+        "independent-review",
+        "ci-automation"
+      ],
+      "required_evidence": [
+        "classification/v1",
+        "test-result/v2",
+        "independent-review/v2"
+      ],
+      "required_validation_categories": [
+        "focused"
+      ]
+    },
+    "Protected": {
+      "prohibited_actions": [
+        "self_independent_review",
+        "autonomous_production_approval",
+        "weakening_native_controls",
+        "unresolved_protected_ambiguity"
+      ],
+      "required_capabilities": [
+        "product-owner",
+        "architect",
+        "engineering-manager",
+        "software-developer",
+        "functional-qa",
+        "non-functional-qa",
+        "independent-review",
+        "solution-sufficiency",
+        "ci-automation"
+      ],
+      "required_evidence": [
+        "classification/v1",
+        "architecture-decision/v1",
+        "test-result/v2",
+        "functional-qa-verdict/v1",
+        "non-functional-qa-verdict/v1",
+        "independent-review/v2",
+        "solution-sufficiency/v1",
+        "human-approval/v1"
+      ],
+      "required_validation_categories": [
+        "focused",
+        "integration",
+        "negative",
+        "security"
+      ]
+    },
+    "Standard": {
+      "prohibited_actions": [
+        "self_independent_review",
+        "unapproved_scope_expansion"
+      ],
+      "required_capabilities": [
+        "software-developer",
+        "functional-qa",
+        "independent-review",
+        "ci-automation"
+      ],
+      "required_evidence": [
+        "classification/v1",
+        "test-result/v2",
+        "functional-qa-verdict/v1",
+        "independent-review/v2"
+      ],
+      "required_validation_categories": [
+        "focused",
+        "integration"
+      ]
+    }
+  },
+  "profile": {
+    "add": {
+      "capabilities": [],
+      "protected_characteristics": [],
+      "protected_path_hints": [],
+      "ux_triggers": []
+    },
+    "description": "General engineering domain without stack assumptions.",
+    "name": "generic"
+  }
+}

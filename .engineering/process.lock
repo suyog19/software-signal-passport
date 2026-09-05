@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-09-05T09:26:40.454887+00:00",
+  "generated_files": {
+    ".engineering/generated/resolved-policy.json": "sha256:c727c0639a7e2f7e8d9b53c0667e431172e2757b2ffb12760a051a76ca39040d",
+    ".engineering/skills/architecture-review/SKILL.md": "sha256:54680e22888f28b40390c5f402fafa7cc5338f3a8db6ebd29ebfac62a854b0e1",
+    ".engineering/skills/functional-qa/SKILL.md": "sha256:6da8f6d1ee5eccca9a0fd2521e55c0a0ac25af0e352a2eda66a5e326a43d30e1",
+    ".engineering/skills/independent-review/SKILL.md": "sha256:4bc27a2d7fe30507d6ce83db616b2c23baa507defea62e8e673d64dd85b17695",
+    ".engineering/skills/non-functional-qa/SKILL.md": "sha256:17c61ad036e624b67b4f669ad239b9b6dd280b11765186d1083da69d2bdaac56",
+    ".engineering/skills/senior-ux-review/SKILL.md": "sha256:75b065163fc2a9881c92f3b9cc5badae4f9d7aae5afb9a1ecae1add890d7bde7",
+    ".engineering/skills/solution-sufficiency/SKILL.md": "sha256:292981093e0eec05133681f7d4ec77f0828a8547dd38d22ca2c4ca096e90942d",
+    ".github/workflows/process-validation.yml": "sha256:a7573ec2b58b3f2bf366c213a6ce4a119d7ae140091d9d176fb3f0ac7a9a6707",
+    "AGENTS.md": "sha256:7969b6356eaa724a7cf75287848c42a89733a3ca328723fee89fd76608a7bf83",
+    "CLAUDE.md": "sha256:478de14b9dbddfd28c66334da91231ada1b98d14e394afe3a8008aee90922064"
+  },
+  "manifest_digest": "sha256:8eac66a87f0b3063841058cc353d3ba63cf83e5e34735766bf373c01e63112ac",
+  "policy_digest": "sha256:6053bdf7609b5b4a35f28f4c9a283b5d91a5d3ea7bdeb1b89c2296fab6ee6c96",
+  "revision": "9f023d4bfd11552b17175698892efe6d9402e4f8",
+  "schema_version": 1,
+  "source": "suyog19/software-engineering-process",
+  "version": "1.4.1"
+}

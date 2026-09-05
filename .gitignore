@@ -1,0 +1,6 @@
+.engineering/effective-obligations.json
+.engineering/evidence/
+__pycache__/
+*.pyc
+node_modules/
+.validation/

@@ -1,0 +1,49 @@
+schema_version: 2
+process:
+  source: suyog19/software-engineering-process
+  version: 1.4.1
+  revision: 9f023d4bfd11552b17175698892efe6d9402e4f8
+  profile: generic
+repository:
+  name: suyog19/software-signal-passport
+overrides:
+  validation:
+    commands:
+    - command: python scripts/validate.py
+      category: focused
+    - command: python -m unittest discover -s tests -p test_copy.py -v
+      category: integration
+    - command: python -m unittest discover -s tests -p test_validate.py -v
+      category: negative
+    - command: python -m unittest discover -s tests -p test_security.py -v
+      category: security
+  agent_execution:
+    sandbox: container
+    network_enforcement: native
+    audit_sink: task-host tool audit and GitHub Actions run logs
+    allowed_tools:
+    - python
+    - git
+    - docker
+    - gh
+    - markdownlint-cli2
+    allowed_network_destinations: []
+    additional_denied_tools:
+    - production-deploy
+adoption:
+  target_mode: Foundation
+  metrics_enabled: false
+adapters:
+  github:
+    readiness_status: engineering-process
+    protected_branch: main
+    production_environment: production
+    runner_labels:
+    - ubuntu-latest
+local_context:
+- category: operating_contract
+  path: docs/decisions.md
+  load_when: load before product scope, governance or publication changes
+- category: validation_testing
+  path: docs/maintainer-workflow.md
+  load_when: load before checks, review, branch or release operations

@@ -1,0 +1,45 @@
+name: Repository quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Repository quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Build pinned development check images
+        run: |
+          docker build --network none --platform linux/amd64 --target python-checks -f .github/checks.Dockerfile -t passport-python-checks:ci .github
+          docker build --network none --platform linux/amd64 --target markdown-checks -f .github/checks.Dockerfile -t passport-markdown-checks:ci .github
+      - name: Distribution and validator tests
+        run: |
+          docker run --rm --memory 512m --cpus 1 --pids-limit 128 --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --tmpfs /tmp:rw,noexec,nosuid,size=64m \
+            --mount "type=bind,source=$GITHUB_WORKSPACE,target=/repo,readonly" \
+            -w /repo -e PYTHONDONTWRITEBYTECODE=1 \
+            passport-python-checks:ci \
+            scripts/validate.py
+          docker run --rm --memory 512m --cpus 1 --pids-limit 128 --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --tmpfs /tmp:rw,noexec,nosuid,size=64m \
+            --mount "type=bind,source=$GITHUB_WORKSPACE,target=/repo,readonly" \
+            -w /repo -e PYTHONDONTWRITEBYTECODE=1 \
+            passport-python-checks:ci \
+            -m unittest discover -s tests -v
+      - name: Markdown lint
+        run: |
+          docker run --rm --memory 512m --cpus 1 --pids-limit 128 --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --mount "type=bind,source=$GITHUB_WORKSPACE,target=/workdir,readonly" \
+            -w /workdir \
+            passport-markdown-checks:ci \
+            '**/*.md'

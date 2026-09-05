@@ -4,7 +4,10 @@ Passport drafts an evidence-linked Review Brief for a GitHub pull request,
 asks durable clarification questions, and incorporates attributable answers.
 Developers correct gaps instead of manually writing the report.
 
-**v0.2.0 is in development; not released or recommended for trial use yet.**
+**v0.2.0 — First Integrated Preview.**
+Check [GitHub Releases](https://github.com/suyog19/software-signal-passport/releases)
+for published versions; a source commit alone does not establish publication.
+Controlled GitHub/Codex integration is tested; real-team usefulness is not yet validated.
 [Installation](docs/installation.md) · [Workflow](docs/workflow.md) ·
 [Protocol](docs/protocol.md) · [Configuration](docs/configuration.md) ·
 [Example brief](docs/example-review-brief.md)

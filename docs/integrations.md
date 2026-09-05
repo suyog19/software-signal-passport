@@ -4,7 +4,7 @@ Current implementation status, not release certification:
 
 | Integration | Status and limits |
 | --- | --- |
-| GitHub.com REST and Actions | Live dispatch, publication, answer update and stale-revision dogfood passed; automatic default-branch events pending |
+| GitHub.com REST and Actions | Automatic PR/comment events, publication, answer updates, stale-revision reassessment and dispatch passed |
 | Deterministic drafting and separate review | Fixture-tested, all four depths and answer convergence |
 | OpenAI Responses | Two real schema-validated draft/review calls passed with synthetic evidence and restricted egress |
 | Codex-compatible AGENTS.md | Live Codex handoff, polling and agent answer exercised on controlled PR #15 |

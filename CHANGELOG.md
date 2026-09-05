@@ -1,11 +1,18 @@
 # Changelog
 
-## 0.2.0 — Unreleased
+## 0.2.0 — 2026-09-05
 
-Integrated preview under development: repository installer, canonical participant
-policy, versioned state/configuration, deterministic GitHub evidence, automatic
-Review Brief, separate review, durable clarification and optional typed model
-interpretation. Release gates and live validation remain pending.
+First Integrated Preview: repository installer with preservation, dry-run, update
+and removal; canonical participant policy; typed state/configuration; deterministic
+GitHub evidence and bounded reports; automatic Review Brief; separate review;
+durable agent/human clarification; and optional schema-validated model interpretation.
+
+Controlled real GitHub events verified automatic drafting, answers and staleness.
+Codex handoff and fresh-agent takeover were exercised, and two real OpenAI calls
+validated draft/review output. 91 tests passed; independent engineering review found no unresolved material
+implementation findings.
+Human authority is never inferred; real-team effort reduction remains unvalidated.
+Publication is complete only when the immutable tag and GitHub Release exist.
 
 ## 0.1.0 — Concept Preview
 

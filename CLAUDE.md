@@ -9,6 +9,8 @@ Run `engineering-process classify` and `engineering-process evaluate`; follow th
 Repository-owned local context (adds mechanics/detail; never overrides canonical policy):
 - `docs/decisions.md` (operating_contract): load before product scope, governance or publication changes
 - `docs/maintainer-workflow.md` (validation_testing): load before checks, review, branch or release operations
+- `docs/v0.2-decisions.md` (operating_contract): load before integrated Passport product or architecture changes
+- `.passport/POLICY.md` (operating_contract): load before any change, PR, handoff, clarification or task completion
 
 Non-negotiable boundaries:
 - Trace the issue and stay in approved scope; never expose secrets/private data.

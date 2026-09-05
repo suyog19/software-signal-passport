@@ -1,5 +1,9 @@
 # v0.1 implementation decisions
 
+Historical scope record. Current integrated-product decisions are in
+[v0.2 decisions](v0.2-decisions.md); the owner-approved v0.2 request supersedes
+the manual-only implementation boundary below.
+
 Scope authority: [epic #1](https://github.com/suyog19/software-signal-passport/issues/1)
 and its implementation issues. Owner: Suyog Joshi.
 

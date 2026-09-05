@@ -114,8 +114,8 @@ def validate(root: Path) -> list[str]:
             found += copy_errors(root, text)
         errors += [f"{path.relative_to(root)}: {error}" for error in found]
     version = root / "VERSION"
-    if version.is_file() and version.read_text().strip() != "0.1.0":
-        errors.append("VERSION must match the v0.1.0 distribution")
+    if version.is_file() and version.read_text().strip() != "0.2.0":
+        errors.append("VERSION must match the v0.2.0 distribution")
     return errors
 
 

@@ -52,15 +52,53 @@ This is local author-supplied test evidence retained in the task audit. It does
 not establish model factual accuracy, provider availability for other accounts
 or production assurance. Provider source was exercised at candidate 8b591539f804f832a30b82d02fb8723fd083cd72.
 
-## Remaining gate
+## Automatic default-branch events after owner merge
 
-Automatic PR/comment event delivery was not demonstrated from the non-default
-fixture installation. Dispatch and direct PR creation are distinct facts.
-The reviewed default-branch installation is prepared in
-[implementation PR #14](https://github.com/suyog19/software-signal-passport/pull/14).
-The process requires the owner's manual promotion before that installation
-becomes the trusted default-branch workflow. Automatic events must be exercised
-afterward before publishing v0.2.0.
+The owner merged implementation PR #14 at e83cb738d3149498f253fc2919a8a98c61a3d173
+and canonical PR #59 at c892f5de40695bef828ab0bbcd1d70825d030d30.
+
+[Controlled PR #16](https://github.com/suyog19/software-signal-passport/pull/16)
+was opened against the installed default branch, with a harmless Markdown file
+under a sensitive path. The initial run exposed an orphaned reusable-workflow
+pin after squash merge and branch deletion. Restoring the reviewed source branch
+allowed GitHub to resolve the same immutable code. The release preparation pins
+orchestration to merged main and runs this source repository from its trusted
+workflow commit; consumer installations retain explicit upstream pins.
+
+- [Automatic PR assessment](https://github.com/suyog19/software-signal-passport/actions/runs/33963394890)
+  collected evidence, drafted/reviewed state and published a single canonical brief.
+- [Automatic comment assessment](https://github.com/suyog19/software-signal-passport/actions/runs/33963434176)
+  consumed the handoff and agent recovery answer; handoff receipt resolved,
+  recovery remained answered/unverified, and human-authority questions stayed open.
+- A new commit bc50c7c00c39e496d4cecf7966a445475f3d7dc7 made the old assessment stale.
+  [Automatic synchronize assessment](https://github.com/suyog19/software-signal-passport/actions/runs/33963470210)
+  recorded the previous commit, reopened questions and retained previous answers.
+- The agent submitted a [current handoff](https://github.com/suyog19/software-signal-passport/pull/16#issuecomment-5551463747)
+  and [current answer](https://github.com/suyog19/software-signal-passport/pull/16#issuecomment-5551464065).
+  [Automatic reassessment](https://github.com/suyog19/software-signal-passport/actions/runs/33963528227)
+  consumed these responses. Human authority and business-rule questions remain
+  deliberately unresolved, while technical recovery is answered but unverified.
+- [Release preparation PR #17](https://github.com/suyog19/software-signal-passport/pull/17)
+  also received automatic assessment on its opened event.
+
+## Depth-transition regression and trusted source runtime
+
+Fresh review found that reducing a previously consequential PR to None depth hid
+its retained questions. The renderer now keeps outstanding questions and command
+errors visible; a clean None change still has minimal output. Three regression
+tests cover these cases, bringing the suite to 94.
+
+PR #16 changed to a text-only diff at 7aaab7f0d1ae182f7a42a7ff155bcc2f540d488b.
+[The fixed-runtime run](https://github.com/suyog19/software-signal-passport/actions/runs/33963876805)
+published None depth while visibly preserving Q-authority and other open questions.
+It used the repository-owned trusted workflow source at
+583287bf2b0e5a051e5eeec0049b1b12c0633051 with immutable orchestration at e83cb73.
+An earlier concurrent-head run correctly failed after publishing a stale warning;
+the stable-head rerun succeeded.
+
+The fixture is not intended for merge. Its assertions do not validate customer
+behavior or production recovery. Owner publication and released-state verification
+are recorded separately in [release issue #13](https://github.com/suyog19/software-signal-passport/issues/13).
 
 No real-team time/effort study, Claude Code execution, GitHub Enterprise support,
 vendor resume API or production readiness is claimed.

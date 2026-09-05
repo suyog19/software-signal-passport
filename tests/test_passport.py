@@ -456,3 +456,31 @@ class RedactionRegressionTests(unittest.TestCase):
             self.assertEqual("High-consequence", state["depth"])
             self.assertEqual(1, state["rationale"].count("Sensitive path:"))
             self.assertTrue(any(q["id"] == "Q-authority" for q in state["questions"]))
+
+class ProportionalVisibilityTests(unittest.TestCase):
+    def test_high_to_none_keeps_unresolved_questions_visible(self):
+        first = run(evidence("auth/main.py"))
+        changed = evidence("notes.txt")
+        new_head = "c"*40
+        for item in changed["evidence"]:
+            item["revision"] = new_head
+        second = run(changed, first, pull=pr(new_head))
+        self.assertEqual("None", second["depth"])
+        public = render(second).split("<!-- passport-state:")[0]
+        self.assertIn("Questions for human", public)
+        self.assertIn("Q-authority", public)
+        self.assertIn("Q-rollback", public)
+        self.assertIn("Previous assessment", public)
+        self.assertIn("advisory-with-open-questions", public)
+
+    def test_clean_none_stays_minimal(self):
+        public = render(run(evidence("notes.txt"))).split("<!-- passport-state:")[0]
+        self.assertIn("no-passport-needed", public)
+        self.assertNotIn("Questions for", public)
+        self.assertNotIn("Recovery (declaration)", public)
+
+    def test_none_exposes_command_errors(self):
+        state = run(evidence("notes.txt", comments=[comment("answer", answer("Q-missing"))]))
+        public = render(state).split("<!-- passport-state:")[0]
+        self.assertIn("Commands needing correction", public)
+        self.assertIn("Unknown question", public)

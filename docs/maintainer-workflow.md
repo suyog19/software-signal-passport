@@ -86,6 +86,25 @@ The generated workflow validates configuration only. Do not claim full process
 readiness enforcement until the authenticated evidence join is installed and
 tested from the owner-approved base.
 
+## Repository self-hosting
+
+This source repository keeps reusable orchestration pinned to merged commit
+e83cb738d3149498f253fc2919a8a98c61a3d173 and selects runtime source using
+github.workflow_sha, the immutable commit containing the trusted caller workflow.
+For automatic PR/comment events that caller comes from the default branch;
+manual dispatch requires a trusted maintainer-selected branch. It never selects
+the assessed PR head or merge ref. This avoids an orphaned pre-squash runtime pin.
+
+This is an intentional repository-owned customization of the installed caller.
+The installer retains its original managed hash, so update/removal refuses to
+overwrite the customization. Reconcile this caller deliberately during maintenance.
+Consumer installations continue to pin both orchestration and runtime to the same
+explicit reviewed upstream commit.
+
+[GitHub's workflow context](https://docs.github.com/en/actions/reference/workflows-and-actions/contexts)
+defines workflow_sha; [its security guidance](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)
+describes the default-branch trust boundary.
+
 ## Release
 
 The [v0.2 release gate](release-gate.md) owns the integrated preview checklist.

@@ -20,11 +20,21 @@ It is not a full Markdown parser, secret scanner or truth validator.
 Use ordinary inline links in maintained documents; review other link syntax
 manually. Generated process files are validated by the canonical process.
 
-Run Markdown lint with the exact Docker image recorded in the quality workflow,
-with repository mounted at `/workdir`, working directory `/workdir`, read-only
-filesystem and `--network none`, passing `**/*.md`. The configuration excludes
-unchanged generated process guidance and allows long tables and HTML comments.
-The image is a development dependency; no installation is needed to use a Passport.
+For the same isolated tools as CI, build both development targets from
+[checks.Dockerfile](../.github/checks.Dockerfile), using the commands in
+[quality.yml](../.github/workflows/quality.yml). Run the Python target with
+`scripts/validate.py` or `-m unittest discover -s tests -v`, and the Markdown
+target with `**/*.md`, using the read-only mounts and network isolation shown
+there. Builds target Linux amd64; native Python checks remain portable.
+The configuration excludes unchanged generated guidance and allows long tables
+and HTML comments. No development image is part of the consumer product.
+
+The small image recipes remove unused package installers and apply exact
+SHA-256-checked vendor security patches. Build steps run without network;
+BuildKit fetches only digest-pinned images and the checksum-verified Alpine
+packages named in the recipe. Review upstream availability and scan both resulting
+images before release. A missing package or checksum mismatch must fail the build;
+do not substitute an unverified download. See [dependency decisions](dependency-review.md).
 
 Review external canonical/GitHub links before release with authorized read-only
 GitHub access. Versioned self-links are checked against local files before the tag
@@ -35,7 +45,7 @@ Actions run read-only source checks on PRs and main. Their successful result
 means structural checks passed; it is **not** authenticated process readiness,
 human approval, or proof of a consumer change's correctness. The generated process
 validation workflow uses upstream action major tags as rendered by process 1.4.1;
-repository-owned workflow actions and check images are pinned to immutable IDs.
+repository-owned workflow actions, base images and patch content are pinned to immutable IDs.
 Dependabot tracks GitHub Actions monthly; review image digests during maintenance.
 
 ## Execution and evidence

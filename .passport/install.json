@@ -1,0 +1,27 @@
+{
+  "files": {
+    ".passport/config.json": "2fea47a7c6bee7bf68fe876af496d1e492ec157367677706bdadafdc00d3121d",
+    ".passport/POLICY.md": "f2c4304807c6e9968e8328a9b9928462fd9b350fc956b2b1f85e0dfb2f6287ad",
+    ".github/workflows/passport-review.yml": "1535e967df13b9ec8f26d0fc4f201975f18b823ef5ed9c2a213b6c0918961466"
+  },
+  "blocks": {
+    "AGENTS.md": {
+      "digest": "6f72ff50d460fb94064e693545e8617e2e3ae0282fa30d7c152b15f7f451060f",
+      "prefix": "\n",
+      "suffix": "\n",
+      "created": false
+    },
+    "CLAUDE.md": {
+      "digest": "6f72ff50d460fb94064e693545e8617e2e3ae0282fa30d7c152b15f7f451060f",
+      "prefix": "\n",
+      "suffix": "\n",
+      "created": false
+    },
+    "PULL_REQUEST_TEMPLATE.md": {
+      "digest": "faee3720672719b2396a62e184ba058a73194e2a2fc6954fde439695ac0d1a97",
+      "prefix": "\n",
+      "suffix": "\n",
+      "created": false
+    }
+  }
+}

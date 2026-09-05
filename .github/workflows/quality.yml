@@ -1,0 +1,20 @@
+name: Controlled Passport replay
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        required: true
+        description: Controlled fixture PR
+permissions: {}
+jobs:
+  passport:
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      checks: read
+      actions: read
+    uses: suyog19/software-signal-passport/.github/workflows/passport.yml@8b591539f804f832a30b82d02fb8723fd083cd72
+    with:
+      runtime-ref: 8b591539f804f832a30b82d02fb8723fd083cd72
+      pr: ${{ inputs.pr }}

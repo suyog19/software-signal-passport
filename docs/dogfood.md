@@ -81,6 +81,21 @@ workflow commit; consumer installations retain explicit upstream pins.
 - [Release preparation PR #17](https://github.com/suyog19/software-signal-passport/pull/17)
   also received automatic assessment on its opened event.
 
+## Depth-transition regression and trusted source runtime
+
+Fresh review found that reducing a previously consequential PR to None depth hid
+its retained questions. The renderer now keeps outstanding questions and command
+errors visible; a clean None change still has minimal output. Three regression
+tests cover these cases, bringing the suite to 94.
+
+PR #16 changed to a text-only diff at 7aaab7f0d1ae182f7a42a7ff155bcc2f540d488b.
+[The fixed-runtime run](https://github.com/suyog19/software-signal-passport/actions/runs/33963876805)
+published None depth while visibly preserving Q-authority and other open questions.
+It used the repository-owned trusted workflow source at
+583287bf2b0e5a051e5eeec0049b1b12c0633051 with immutable orchestration at e83cb73.
+An earlier concurrent-head run correctly failed after publishing a stale warning;
+the stable-head rerun succeeded.
+
 The fixture is not intended for merge. Its assertions do not validate customer
 behavior or production recovery. Owner publication and released-state verification
 are recorded separately in [release issue #13](https://github.com/suyog19/software-signal-passport/issues/13).

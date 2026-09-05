@@ -4,7 +4,7 @@ import json
 import re
 import time
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 from .schema import Invalid, parse
 from .security import REPO, SHA, path_ok
@@ -88,3 +88,30 @@ class GitHub:
             if "HTTP 404" in str(exc):
                 return "none"
             raise
+
+    def artifact(self, ident):
+        if type(ident) is not int or ident < 1:
+            raise Invalid("Invalid artifact identity")
+        request = Request(f"https://api.github.com/repos/{self.repo}/actions/artifacts/{ident}/zip",
+                          headers={"Authorization": "Bearer "+self.token, "User-Agent": "software-signal-passport"})
+        try:
+            self.open(request, timeout=30)
+            raise Invalid("Expected GitHub artifact redirect")
+        except HTTPError as exc:
+            if exc.code != 302:
+                raise Invalid(f"Artifact unavailable (HTTP {exc.code})") from None
+            location = exc.headers.get("Location", "")
+        target = urlsplit(location)
+        host = target.hostname or ""
+        if target.scheme != "https" or target.username or target.password or target.port not in (None, 443) or not (
+            host.endswith(".blob.core.windows.net") or host.endswith(".actions.githubusercontent.com")):
+            raise Invalid("Artifact download host is not permitted")
+        # No Authorization header is forwarded to the signed artifact location.
+        try:
+            with self.open(Request(location, headers={"User-Agent": "software-signal-passport"}), timeout=30) as response:
+                content = response.read(1000001)
+            if len(content) > 1000000:
+                raise Invalid("Report archive exceeds 1 MB")
+            return content
+        except (HTTPError, URLError, TimeoutError):
+            raise Invalid("Artifact download failed; report content unavailable") from None

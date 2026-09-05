@@ -11,11 +11,11 @@ overrides:
     commands:
     - command: python scripts/validate.py
       category: focused
-    - command: python -m unittest discover -s tests -p test_copy.py -v
+    - command: python -m unittest discover -s tests -v
       category: integration
     - command: python -m unittest discover -s tests -p test_validate.py -v
       category: negative
-    - command: python -m unittest discover -s tests -p test_security.py -v
+    - command: python -m unittest discover -s tests -v
       category: security
   agent_execution:
     sandbox: container
@@ -47,3 +47,9 @@ local_context:
 - category: validation_testing
   path: docs/maintainer-workflow.md
   load_when: load before checks, review, branch or release operations
+- category: operating_contract
+  path: docs/v0.2-decisions.md
+  load_when: load before integrated Passport product or architecture changes
+- category: operating_contract
+  path: .passport/POLICY.md
+  load_when: load before any change, PR, handoff, clarification or task completion

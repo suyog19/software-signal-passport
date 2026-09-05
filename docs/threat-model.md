@@ -25,7 +25,10 @@ using delegated human credentials must never impersonate authority. Dedicated
 agent accounts and repository governance remain necessary.
 
 Administrators and trusted workflows can alter bot comments or remove artifacts.
-Storage is not tamper-proof. No external evidence URL is dereferenced. Context
+Storage is not tamper-proof. No arbitrary answer URL is dereferenced. Report downloads follow only GitHub-issued
+artifact redirects to permitted HTTPS storage hosts without forwarding credentials.
+Archives are inspected in memory with bounded size/entry counts; traversal, symlinks
+and XML entity declarations are rejected. No archive content is executed. Context
 comes from permitted trusted-base files. Model use is opt-in. Redaction is defense
 in depth, not a complete detector; never supply secrets or private transcripts.
 

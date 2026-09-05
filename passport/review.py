@@ -22,6 +22,7 @@ def run(state, current_head):
         if "pass" in claim["claim"].lower() and failed:
             findings.append("Claimed passing verification contradicts observed failed/cancelled checks")
     for q in state["questions"]:
+        before_status = q["status"]
         if q["status"] in {"accepted-unresolved", "superseded"}:
             continue
         if q["id"] == "Q-handoff":
@@ -37,6 +38,8 @@ def run(state, current_head):
             # Arbitrary metadata/file URLs never establish recovery, business rules
             # or the truth of a technical claim. Human verification can close it.
             findings.append(q["id"]+": answer received; substantive verification is not automated")
+        if q["status"] != before_status:
+            q["updated_at"] = state["updated_at"]
     if state["depth"] in {"None", "Light"} and state["questions"]:
         findings.append("Review proportionality: questions persisted from prior consequential assessment")
     for q in state["questions"]:

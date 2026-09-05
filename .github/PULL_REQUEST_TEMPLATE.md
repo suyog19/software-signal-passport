@@ -15,3 +15,7 @@ For trivial changes, explain the change and verification briefly.
 - Publication or governance changes needing the manual owner boundary:
 
 Preserve failed or unverified checks. This template does not approve merging.
+
+<!-- passport:begin -->
+Passport drafts the Review Brief automatically. Open a draft PR early; see [.passport/POLICY.md](../.passport/POLICY.md). Supply intent and answer genuine gaps; do not manually author a Passport.
+<!-- passport:end -->

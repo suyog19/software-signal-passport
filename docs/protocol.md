@@ -24,9 +24,10 @@ Latest valid current-revision handoff wins.
 ```
 
 Use real same-repository links. Passport never fetches arbitrary answer URLs.
-Separate review matches citations to observed evidence at the assessed commit.
-Verification questions require a successful observed check. A link alone does
-not verify every assertion in the answer.
+Separate review verifies receipt of a current handoff and reevaluates current
+check outcomes. Other technical and authority answers remain answered until
+a configured human records verification or acceptance. Mere citation membership
+never resolves a substantive claim.
 
 Eligible contributors are the PR author, configured agent accounts or current
 write/maintain/admin collaborators. Human-authority answers require the additional
@@ -43,7 +44,7 @@ Never use an example to fabricate a decision. Actions: request-evidence,
 reassign-agent, escalate, accept-unresolved, supersede, reopen and close.
 Reassignment to agent, acceptance, supersession and closure require human authority.
 Human-addressed questions require human authority for all actions and answers.
-close refuses an unverified question. accept-unresolved keeps the gap visible.
+close requires an answered question and records an authorized human verification declaration. accept-unresolved keeps the gap visible.
 reopen and request-evidence return it to open; escalate routes to human.
 
 Each question records ID, text, trigger, reason, role, status, effect, timestamps,

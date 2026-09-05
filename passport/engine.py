@@ -19,7 +19,7 @@ def assess(repo, pr, config, collected, previous, now, permission, model=None):
         "depth": depth, "rationale": rationale, "intent": redact(pr["title"])[:2000],
         "context": collected["context"], "handoff": [], "evidence": collected["evidence"],
         "declarations": copy.deepcopy(previous["declarations"]) if previous else [],
-        "inferences": [], "uncertainties": [],
+        "inferences": [], "uncertainties": list(collected.get("report_gaps", [])),
         "questions": copy.deepcopy(previous["questions"]) if previous else [],
         "answers": copy.deepcopy(previous["answers"]) if previous else [], "roles": [],
         "review": {"revision": head, "stage": "independent-review", "findings": [], "model": {"interpretations": [], "uncertainties": []}},
@@ -109,7 +109,7 @@ def assess(repo, pr, config, collected, previous, now, permission, model=None):
         except Invalid as exc:
             state["command_errors"].append(str(comment["id"])+": "+str(exc))
     state["provenance"]["input_digest"] = digest({"head": head, "base": base, "commands": permitted_commands, "config": config, "evidence": state["evidence"], "context": state["context"],
-                                                "handoff": state["handoff"], "events": event_ids})
+                                                "handoff": state["handoff"], "report_gaps": collected.get("report_gaps", []), "events": event_ids})
     # Repeat deliveries with unchanged evidence never consume a model call or new state revision.
     if previous and previous["provenance"]["input_digest"] == state["provenance"]["input_digest"]:
         return previous

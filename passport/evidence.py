@@ -3,6 +3,7 @@ import re
 from urllib.parse import quote
 from .schema import Invalid, check, parse
 from .security import path_ok, redact
+from .reports import summarize
 
 DEPTHS = ["None", "Light", "Standard", "High-consequence"]
 
@@ -65,6 +66,32 @@ def collect(api, number, config, pr):
         evidence.append({"id": "status-"+str(c["id"]), "kind": "commit-status",
                          "summary": redact(c["context"]+": "+c["state"])[:1000],
                          "url": url+"/commit/"+head, "revision": head})
+    report_gaps = []
+    if "checks" in config["evidence_sources"]:
+        runs = api.pages(f"actions/runs?head_sha={head}", "workflow_runs", 100)
+        reports = []
+        for run in runs[:5]:
+            if run.get("head_sha") != head:
+                continue
+            artifacts = api.pages(f"actions/runs/{run['id']}/artifacts", "artifacts", 100)
+            reports.extend((run, a) for a in artifacts if re.search(r"test|junit|coverage|sarif|security|static|lint", a["name"], re.I))
+        if not reports:
+            report_gaps.append("Test, coverage, static-analysis and security report artifacts: Not found; check status alone does not establish report coverage")
+        for run, artifact in reports[:4]:
+            report_url = url+f"/actions/runs/{run['id']}/artifacts/{artifact['id']}"
+            try:
+                if artifact.get("expired") or artifact.get("size_in_bytes", 1000001) > 1000000:
+                    raise Invalid("Report expired or exceeds 1 MB")
+                summaries = summarize(api.artifact(artifact["id"]))
+                for i, summary in enumerate(summaries[:8]):
+                    evidence.append({"id": f"report-{artifact['id']}-{i}", "kind": "workflow-report",
+                        "summary": "Observed publisher report: "+summary, "url": report_url, "revision": head})
+            except Invalid as exc:
+                report_gaps.append("Report "+artifact["name"]+": "+str(exc))
+        if len(reports) > 4 or len(runs) > 5:
+            report_gaps.append("Report collection bounded to five runs and four matching artifacts; additional reports uninspected")
+    else:
+        report_gaps.append("Checks and report collection disabled by repository policy")
     context = []
     if "context" in config["evidence_sources"]:
         for path in config["context_paths"]:
@@ -75,4 +102,4 @@ def collect(api, number, config, pr):
     for n in dict.fromkeys(issue_refs):
         evidence.append({"id": "issue-"+n, "kind": "declared-issue-reference", "summary": "PR body references issue #"+n,
                          "url": url+"/issues/"+n, "revision": head})
-    return {"files": files, "comments": comments, "evidence": evidence, "context": context, "checks": checks, "statuses": statuses}
+    return {"files": files, "comments": comments, "evidence": evidence, "context": context, "checks": checks, "statuses": statuses, "report_gaps": report_gaps}

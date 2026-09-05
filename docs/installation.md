@@ -21,8 +21,10 @@ filesystem failure during a write; use a clean Git checkout for recovery.
 
 The installer refuses to edit generated AGENTS.md or CLAUDE.md. Their generator
 owns those files. Add the canonical Passport policy as repository-owned local
-context through that generator, preserving process controls. An automatic
-generator integration is not yet implemented; generated adapters are currently an unsupported automatic install target.
+context through that generator, preserving process controls. For Software Engineering Process, add .passport/POLICY.md to local_context and
+run its reviewed upgrade/render workflow. Retry the installer: it detects the
+existing canonical pointer and leaves the generated adapters untouched. Remove
+that pointer through the generator before uninstalling Passport.
 
 Repositories with hand-maintained instruction files use the installer directly.
 Existing PR template content is retained. Repositories selecting a different

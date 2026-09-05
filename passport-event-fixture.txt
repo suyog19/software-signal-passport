@@ -1,0 +1,2 @@
+Controlled None-depth fixture after removing the earlier sensitive-path change.
+Prior unresolved authority must remain visible; never merge this fixture.

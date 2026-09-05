@@ -1,8 +1,8 @@
 {
   "files": {
-    ".passport/config.json": "2fea47a7c6bee7bf68fe876af496d1e492ec157367677706bdadafdc00d3121d",
+    ".passport/config.json": "01d9c658d3955b3df122a301e3f415c6389823b54c5f33229e3e7ab6c44b4ea5",
     ".passport/POLICY.md": "f2c4304807c6e9968e8328a9b9928462fd9b350fc956b2b1f85e0dfb2f6287ad",
-    ".github/workflows/passport-review.yml": "1535e967df13b9ec8f26d0fc4f201975f18b823ef5ed9c2a213b6c0918961466"
+    ".github/workflows/passport-review.yml": "396204dc92064c4186f9d28377d0f7390cc33226542ee65a1e222f993a127b8f"
   },
   "blocks": {
     "AGENTS.md": {

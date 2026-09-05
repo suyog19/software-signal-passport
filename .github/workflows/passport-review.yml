@@ -24,9 +24,9 @@ jobs:
       issues: read
       checks: read
       actions: read
-    uses: suyog19/software-signal-passport/.github/workflows/passport.yml@5ac5b18e843bc274b3bdc3840a1d83e9fb61d494
+    uses: suyog19/software-signal-passport/.github/workflows/passport.yml@8845a016f602e954cb4e7ab095825d290bfa9163
     with:
-      runtime-ref: 5ac5b18e843bc274b3bdc3840a1d83e9fb61d494
+      runtime-ref: 8845a016f602e954cb4e7ab095825d290bfa9163
       pr: ${{ github.event.pull_request.number || github.event.issue.number || inputs.pr }}
     secrets:
       model-key: ${{ secrets.PASSPORT_MODEL_KEY }}

@@ -62,7 +62,8 @@ was opened against the installed default branch, with a harmless Markdown file
 under a sensitive path. The initial run exposed an orphaned reusable-workflow
 pin after squash merge and branch deletion. Restoring the reviewed source branch
 allowed GitHub to resolve the same immutable code. The release preparation pins
-the installation to the merged main commit so feature-branch retention is unnecessary.
+orchestration to merged main and runs this source repository from its trusted
+workflow commit; consumer installations retain explicit upstream pins.
 
 - [Automatic PR assessment](https://github.com/suyog19/software-signal-passport/actions/runs/33963394890)
   collected evidence, drafted/reviewed state and published a single canonical brief.

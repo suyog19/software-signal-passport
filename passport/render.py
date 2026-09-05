@@ -25,7 +25,8 @@ def render(state, current_head=None):
         "", "**Depth:** "+safe_text(state["rationale"], 500)]
     if state["previous_commit"]:
         lines += ["", "Previous assessment and its answers became stale after a new commit."]
-    if state["depth"] != "None":
+    outstanding = any(q["status"] not in {"resolved", "superseded"} for q in state["questions"])
+    if state["depth"] != "None" or outstanding or state["command_errors"]:
         lines += ["", "**Accountable owner:** "+safe_text("; ".join(state["roles"]), 400)]
         handoff = state["handoff"][0]["data"] if state["handoff"] else {}
         lines += ["", "**Context / rules (declaration):** "+safe_text(handoff.get("business_rules") or "Unknown", 500),

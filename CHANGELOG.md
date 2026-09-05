@@ -9,7 +9,7 @@ durable agent/human clarification; and optional schema-validated model interpret
 
 Controlled real GitHub events verified automatic drafting, answers and staleness.
 Codex handoff and fresh-agent takeover were exercised, and two real OpenAI calls
-validated draft/review output. 91 tests passed; independent engineering review found no unresolved material
+validated draft/review output. 94 tests passed; independent engineering review found no unresolved material
 implementation findings.
 Human authority is never inferred; real-team effort reduction remains unvalidated.
 Publication is complete only when the immutable tag and GitHub Release exist.
